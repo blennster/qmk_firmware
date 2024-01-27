@@ -1,0 +1,4 @@
+CONVERT_TO = liatris
+WPM_ENABLE = yes
+CAPS_WORD_ENABLE = yes
+COMMAND = no
