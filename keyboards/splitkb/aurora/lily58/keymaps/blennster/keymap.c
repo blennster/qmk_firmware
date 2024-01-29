@@ -2,6 +2,8 @@
 
 enum layers { _DEFAULT, _LOWER, _RAISE, _ADJUST };
 
+enum keys { B_BAR };
+
 // clang-format off
 // layouts can be formatted using "!column -s , -t -o ," on the selection
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -13,11 +15,11 @@ KC_LCTL  ,KC_Z  ,KC_X  ,KC_C      ,KC_V    ,KC_B     ,KC_LBRC  ,KC_RBRC    ,KC_N
 /*s      ,s     ,s     ,*/KC_LALT ,KC_LGUI ,MO(1)    ,KC_SPC   ,KC_ENT     ,MO(2)   ,KC_BSPC  ,KC_RALT /*,s       ,s       ,s       ,*/
     ),
     [1] = LAYOUT(
-_______ ,KC_F1   ,KC_F2   ,KC_F3     ,KC_F4   ,KC_F5   /*,mcu     ,mcu*/   ,KC_F6   ,KC_F7   ,KC_F8     ,KC_F9   ,KC_F10  ,KC_F11  ,
-KC_F1   ,KC_F2   ,KC_F3   ,KC_F4     ,KC_F5   ,KC_F6   /*,mcu     ,mcu*/   ,KC_F7   ,KC_F8   ,KC_F9     ,KC_F10  ,KC_F11  ,KC_F12  ,
-_______ ,KC_EXLM ,KC_AT   ,KC_HASH   ,KC_DLR  ,KC_PERC /*,mcu     ,mcu*/   ,KC_CIRC ,KC_AMPR ,KC_ASTR   ,KC_LPRN ,KC_RPRN ,KC_PIPE ,
-_______ ,KC_NUBS ,_______ ,_______   ,_______ ,_______   ,_______ ,_______ ,XXXXXXX ,KC_UNDS ,KC_PLUS   ,KC_LCBR ,KC_RCBR ,_______ ,
-/*s     ,s       ,s       ,*/_______ ,_______ ,_______   ,_______ ,_______ ,MO(3)   ,KC_DEL  ,_______ /*,s       ,s       ,s       ,*/
+_______ ,KC_F1   ,KC_F2   ,KC_F3     ,KC_F4   ,KC_F5   /*,mcu           ,mcu*/         ,KC_F6   ,KC_F7   ,KC_F8     ,KC_F9   ,KC_F10  ,KC_F11  ,
+KC_F1   ,KC_F2   ,KC_F3   ,KC_F4     ,KC_F5   ,KC_F6   /*,mcu           ,mcu*/         ,KC_F7   ,KC_F8   ,KC_F9     ,KC_F10  ,KC_F11  ,KC_F12  ,
+_______ ,KC_EXLM ,KC_AT   ,KC_HASH   ,KC_DLR  ,KC_PERC /*,mcu           ,mcu*/         ,KC_CIRC ,KC_AMPR ,KC_ASTR   ,KC_LPRN ,KC_RPRN ,KC_PIPE ,
+_______ ,KC_NUBS ,_______ ,_______   ,_______ ,_______   ,LSFT(KC_NUBS) ,RALT(KC_NUBS) ,XXXXXXX ,KC_UNDS ,KC_PLUS   ,KC_LCBR ,KC_RCBR ,_______ ,
+/*s     ,s       ,s       ,*/_______ ,_______ ,_______   ,_______       ,_______       ,MO(3)   ,KC_DEL  ,_______ /*,s       ,s       ,s       ,*/
     ),
     [2] = LAYOUT(
 _______ ,_______ ,_______ ,_______   ,_______ ,_______  /*,mcu     ,mcu*/   ,_______ ,_______ ,_______   ,_______  ,_______ ,KC_VOLU ,
@@ -36,8 +38,15 @@ XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX   ,RGB_MOD ,RGB_TOG ,QK_M
 };
 // clang-format on
 
-#ifdef OLED_ENABLE
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case KC_SPC:
+    }
+    return true;
+}
 
+
+#ifdef OLED_ENABLE
 void render_space_user(void) {
     oled_write_P(PSTR("     "), false);
 }
