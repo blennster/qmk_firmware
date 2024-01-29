@@ -1,7 +1,5 @@
 #include QMK_KEYBOARD_H
 
-#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
-
 enum layers { _DEFAULT, _LOWER, _RAISE, _ADJUST };
 
 // clang-format off
@@ -23,17 +21,17 @@ _______ ,KC_NUBS ,_______ ,_______   ,_______ ,_______   ,_______ ,_______ ,XXXX
     ),
     [2] = LAYOUT(
 _______ ,_______ ,_______ ,_______   ,_______ ,_______  /*,mcu     ,mcu*/   ,_______ ,_______ ,_______   ,_______  ,_______ ,KC_VOLU ,
-KC_GRV  ,KC_1    ,KC_2    ,KC_3      ,KC_4    ,KC_5     /*,mcu     ,mcu*/   ,KC_6    ,KC_7    ,KC_8      ,KC_9     ,KC_MPRV ,KC_VOLD ,
+KC_GRV  ,KC_1    ,KC_2    ,KC_3      ,KC_4    ,KC_5     /*,mcu     ,mcu*/   ,KC_6    ,KC_WH_U ,KC_8      ,KC_9     ,KC_MPRV ,KC_VOLD ,
 KC_F1   ,KC_F2   ,KC_F3   ,KC_F4     ,KC_F5   ,KC_F6    /*,mcu     ,mcu*/   ,KC_LEFT ,KC_DOWN ,KC_UP     ,KC_RIGHT ,XXXXXXX ,XXXXXXX ,
-KC_F7   ,KC_NUBS ,KC_F9   ,KC_F10    ,KC_F11  ,KC_F12     ,_______ ,_______ ,KC_MNXT ,KC_MINS ,KC_EQL    ,KC_LBRC  ,KC_MPLY ,_______ ,
+KC_F7   ,KC_NUBS ,KC_F9   ,KC_F10    ,KC_F11  ,KC_F12     ,_______ ,_______ ,KC_MNXT ,KC_WH_D ,KC_EQL    ,KC_LBRC  ,KC_MPLY ,_______ ,
 /*s     ,s       ,s       ,*/_______ ,_______ ,MO(3)      ,_______ ,_______ ,_______ ,KC_DEL  ,_______/* ,s        ,s       ,s       ,*/
     ),
     [3] = LAYOUT(
-XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX /*,mcu     ,mcu*/   ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,RGB_HUI ,RGB_SAI ,RGB_VAI ,
-XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX /*,mcu     ,mcu*/   ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,RGB_HUD ,RGB_SAD ,RGB_VAD ,
-XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX /*,mcu     ,mcu*/   ,KC_HOME ,KC_PGDN ,KC_PGUP   ,KC_END  ,XXXXXXX ,XXXXXXX ,
-XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,RGB_TOG ,XXXXXXX ,XXXXXXX ,RGB_MOD   ,XXXXXXX ,XXXXXXX ,XXXXXXX ,
-/*s     ,s       ,s       ,*/_______ ,_______ ,_______   ,_______ ,_______ ,_______ ,_______ ,_______/* ,s       ,s       ,s       ,*/
+XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX /*,mcu     ,mcu*/   ,XXXXXXX              ,XXXXXXX ,XXXXXXX   ,RGB_HUI ,RGB_SAI ,RGB_VAI ,
+XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX /*,mcu     ,mcu*/   ,XXXXXXX              ,XXXXXXX ,XXXXXXX   ,RGB_HUD ,RGB_SAD ,RGB_VAD ,
+XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX /*,mcu     ,mcu*/   ,KC_HOME              ,KC_PGDN ,KC_PGUP   ,KC_END  ,XXXXXXX ,XXXXXXX ,
+XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX   ,RGB_MOD ,RGB_TOG ,QK_MAGIC_TOGGLE_NKRO ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX ,XXXXXXX ,
+/*s     ,s       ,s       ,*/_______ ,_______ ,_______   ,_______ ,_______ ,_______              ,_______ ,_______/* ,s       ,s       ,s       ,*/
     )
 };
 // clang-format on
