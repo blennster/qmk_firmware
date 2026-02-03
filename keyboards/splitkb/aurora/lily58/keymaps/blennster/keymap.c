@@ -1,8 +1,12 @@
+#include "keyboard.h"
+#include "keycode.h"
+#include "send_string_keycodes.h"
 #include QMK_KEYBOARD_H
+#include "os_detection.h"
+// #include "process_key_override.h"
 
 enum layers { _DEFAULT, _LOWER, _RAISE, _ADJUST };
-
-enum keys { B_BAR };
+enum keycodes { BAR = SAFE_RANGE };
 
 // clang-format off
 // layouts can be formatted using "!column -s , -t -o ," on the selection
@@ -18,7 +22,7 @@ KC_LCTL  ,KC_Z  ,KC_X  ,KC_C      ,KC_V    ,KC_B     ,KC_LBRC  ,KC_RBRC    ,KC_N
 _______ ,KC_F1   ,KC_F2   ,KC_F3     ,KC_F4   ,KC_F5   /*,mcu           ,mcu*/         ,KC_F6      ,KC_F7      ,KC_F8      ,KC_F9      ,KC_F10  ,KC_F11  ,
 KC_F1   ,KC_F2   ,KC_F3   ,KC_F4     ,KC_F5   ,KC_F6   /*,mcu           ,mcu*/         ,KC_F7      ,KC_F8      ,KC_F9      ,KC_F10     ,KC_F11  ,KC_F12  ,
 _______ ,KC_EXLM ,KC_AT   ,KC_HASH   ,KC_DLR  ,KC_PERC /*,mcu           ,mcu*/         ,KC_CIRC    ,KC_AMPR    ,KC_ASTR    ,KC_LPRN    ,KC_RPRN ,KC_PIPE ,
-_______ ,KC_NUBS ,_______ ,_______   ,_______ ,_______   ,LSFT(KC_NUBS) ,RALT(KC_NUBS) ,RALT(KC_7) ,RALT(KC_8) ,RALT(KC_9) ,RALT(KC_0) ,KC_RCBR ,_______ ,
+_______ ,KC_NUBS ,_______ ,_______   ,_______ ,_______   ,LSFT(KC_NUBS) ,BAR           ,RALT(KC_7) ,RALT(KC_8) ,RALT(KC_9) ,RALT(KC_0) ,KC_RCBR ,_______ ,
 /*s     ,s       ,s       ,*/_______ ,_______ ,_______   ,_______       ,_______       ,MO(3)      ,KC_DEL     ,_______ /* ,s          ,s       ,s       ,*/
     ),
     [2] = LAYOUT(
@@ -38,6 +42,24 @@ XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX   ,XXXXXXX ,XXXXXXX   ,RGB_MOD ,RGB_TOG ,QK_M
     )
 };
 // clang-format on
+
+// bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+//     switch (get_highest_layer(layer_state)) {
+//     case _RAISE:
+//         rgb_matrix_set_color_all (0x00,  0x00, 0xFF);
+//         break;
+//     case _LOWER:
+//         rgb_matrix_set_color_all (0xFF,  0x00, 0x00);
+//         break;
+//     case _ADJUST:
+//         rgb_matrix_set_color_all (0xFF,  0xFF, 0xFF);
+//         break;
+//     default: //  for any other layers, or the default layer
+//         // rgb_matrix_set_color_all (0xFF,  0xFF, 0xFF);
+//         break;
+//     }
+//   return false;
+// }
 
 #ifdef OLED_ENABLE
 void render_space_user(void) {
@@ -209,11 +231,73 @@ void render_layer_state_user(void) {
     }
 }
 
+static char b[6] = "[OS] ";
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case BAR: {
+            static uint16_t code = RALT(KC_NUBS);
+            os_variant_t    os   = detected_host_os();
+
+            if (os == OS_IOS || os == OS_MACOS) {
+                code = RALT(KC_7);
+            }
+
+            if (record->event.pressed) {
+                register_code16(code);
+            } else {
+                unregister_code16(code);
+            }
+            return false;
+        }
+        default:
+            return true;
+    }
+}
+
+bool process_detected_host_os_user(os_variant_t detected_os) {
+    switch (detected_os) {
+        case OS_MACOS:
+        case OS_IOS:
+            sprintf(b, "APPLE");
+            break;
+        case OS_WINDOWS:
+            sprintf(b, "WIN  ");
+            break;
+        case OS_LINUX:
+            sprintf(b, "LINUX");
+            break;
+        case OS_UNSURE:
+            sprintf(b, "UNKWN");
+            return false;
+            break;
+    }
+
+    return true;
+}
+
+uint32_t os_settings(uint32_t t_time, void *cb_arg) {
+    uint32_t retry = 500;
+
+    if (process_detected_host_os_user(detected_host_os())) {
+        retry = 0;
+    }
+
+    return retry;
+}
+
+void keyboard_post_init_user(void) {
+    defer_exec(400, os_settings, NULL);
+}
+
 bool oled_task_user(void) {
     // Slave does not have any oled
     if (is_keyboard_master()) {
+        // process_detected_host_os_user(detected_host_os());
         // Renders the current keyboard state (layers and mods)
-        oled_write_P(PSTR("emil "), false);
+        oled_write_P(PSTR("EMIL "), false);
+        oled_write_P(PSTR(b), false);
+
         render_space_user();
         render_layer_state_user();
         render_space_user();
